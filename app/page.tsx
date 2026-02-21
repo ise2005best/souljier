@@ -40,7 +40,7 @@ const Page = () => {
         style={{ backgroundImage: `url('assets/home.jpg')` }}
       />
 
-      <p className="md:text-3xl text-xl relative z-10 font-primary text-center">
+      <p className="md:text-3xl text-xl text-white relative z-10 font-primary text-center">
         FIRST ACCESS. LIMITED PIECES. SIGNUP NOW.
       </p>
 
