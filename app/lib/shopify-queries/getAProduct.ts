@@ -1,5 +1,5 @@
 import { GET_ONE_PRODUCT } from "@/app/graphql/getOneProduct";
-import { ProductNode, Product } from "../interfaces/products.interface";
+import { ProductNode, Product } from "../interfaces/product.interface";
 
 export const getAProduct = async (
   id: string,
