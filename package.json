@@ -11,6 +11,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
     "@vercel/analytics": "^1.6.1",
+    "graphql-request": "^7.4.0",
     "lucide-react": "^0.564.0",
     "next": "16.1.6",
     "react": "19.2.3",
@@ -27,5 +28,9 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/ise2005best/souljier.git",
+  "author": "ise2005best <iseoluwaariyibi@gmail.com>",
+  "license": "MIT"
 }
