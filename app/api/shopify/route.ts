@@ -3,8 +3,6 @@ import { NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
     const API_URL = `https://${process.env.SHOPIFY_STORE_DOMAIN}.myshopify.com/admin/api/2025-07/graphql.json`;
     const API_TOKEN = process.env.PRIVATE_ACCESS_TOKEN;
-    console.log("TOKEN:", API_TOKEN);
-    console.log("STORE:", process.env.SHOPIFY_STORE_DOMAIN);
     const requestBody = await request.json();
 
     try {

@@ -38,7 +38,7 @@ query getProductById($handle: String!, $locationId: ID!) {
         }
       }
     }
-    media(first:5){
+    media(first:7){
             edges{
               node{
                 ... on MediaImage{
