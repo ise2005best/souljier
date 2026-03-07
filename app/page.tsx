@@ -1,5 +1,30 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+
+const LAUNCH_DATE = new Date("2026-03-09T18:00:00Z");
+
+const calcTimeLeft = (target: Date) => {
+  const diff = target.getTime() - Date.now();
+  if (diff <= 0) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+  return {
+    days: Math.floor(diff / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((diff / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((diff / (1000 * 60)) % 60),
+    seconds: Math.floor((diff / 1000) % 60),
+  };
+};
+
+const useCountdown = (target: Date) => {
+  const [timeLeft, setTimeLeft] = useState(() => calcTimeLeft(target));
+
+  useEffect(() => {
+    const interval = setInterval(() => setTimeLeft(calcTimeLeft(target)), 1000);
+    return () => clearInterval(interval);
+  }, [target]);
+
+  return timeLeft;
+};
+const pad = (n: number) => String(n).padStart(2, "0");
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -7,17 +32,17 @@ const Page = () => {
     "idle" | "loading" | "success" | "error"
   >("idle");
 
+  const { days, hours, minutes, seconds } = useCountdown(LAUNCH_DATE);
+  const isLaunched = days === 0 && hours === 0 && minutes === 0 && seconds === 0;
+
   const handleEmailSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setEmailStatus("loading");
 
     try {
-      // Replace with your actual API endpoint
       const response = await fetch("/api/email-signup", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
 
@@ -34,19 +59,44 @@ const Page = () => {
   };
 
   return (
-    <div className="relative md:min-h-[80vh] min-h-screen flex flex-col items-center justify-center">
+    <div className="relative md:min-h-[80vh] min-h-screen flex flex-col items-center justify-center gap-6">
       <div
         className="absolute inset-0 bg-cover bg-center bg-no-repeat bg-fixed"
         style={{ backgroundImage: `url('assets/home.jpg')` }}
       />
 
-      <p className="md:text-3xl text-xl text-white relative z-10 font-primary text-center">
+      <p className="md:text-3xl text-xl text-white relative z-10 font-primary text-center px-4">
         FIRST ACCESS. LIMITED PIECES. SIGNUP NOW.
       </p>
 
+      {/* Countdown Timer */}
+      <div className="relative z-10 flex gap-4 md:gap-8">
+        {isLaunched ? (
+          <p className="text-white font-primary text-2xl tracking-widest">
+            WE ARE LIVE
+          </p>
+        ) : (
+          [
+            { label: "DAYS", value: days },
+            { label: "HRS", value: hours },
+            { label: "MIN", value: minutes },
+            { label: "SEC", value: seconds },
+          ].map(({ label, value }) => (
+            <div key={label} className="flex flex-col items-center">
+              <span className="text-white font-primary md:text-5xl text-3xl font-bold tabular-nums">
+                {pad(value)}
+              </span>
+              <span className="text-white/60 font-primary text-[10px] md:text-xs tracking-widest mt-1">
+                {label}
+              </span>
+            </div>
+          ))
+        )}
+      </div>
+
       {/* Email Signup Form */}
       <div className="relative z-10 w-full max-w-md px-6 font-primary">
-        <div className=" rounded-lg shadow-2xl p-8 md:p-10">
+        <div className="rounded-lg shadow-2xl p-8 md:p-10">
           <form onSubmit={handleEmailSignup} className="space-y-4">
             <div>
               <input
