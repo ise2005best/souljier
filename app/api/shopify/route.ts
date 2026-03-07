@@ -1,16 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(request: NextRequest) {
-    const API_URL = `https://${process.env.SHOPIFY_STORE_DOMAIN}.myshopify.com/admin/api/2025-07/graphql.json`;
-    const API_TOKEN = process.env.PRIVATE_ACCESS_TOKEN;
+    const API_URL = `https://${process.env.SHOPIFY_STORE_DOMAIN}.myshopify.com/api/2025-01/graphql.json`;
+   
     const requestBody = await request.json();
+    const token = process.env.SHOPIFY_STOREFRONT_API
 
     try {
         const response = await fetch(API_URL, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "X-Shopify-Access-Token": API_TOKEN!,
+                "Shopify-Storefront-Private-Token": token!,
             },
             body: JSON.stringify(requestBody),
         });
@@ -21,6 +22,7 @@ export async function POST(request: NextRequest) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
+        console.log(data)
 
         return NextResponse.json(data);
     }

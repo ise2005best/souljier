@@ -1,4 +1,4 @@
-export const Get_PRODUCTS_QUERY = `{
+export const GET_PRODUCTS_QUERY = `{
   products(first: 10) {
     edges {
       cursor
@@ -13,10 +13,12 @@ export const Get_PRODUCTS_QUERY = `{
             node {
               id
               title
-              inventoryItem {
-                id
+              availableForSale
+              quantityAvailable
+              price {
+                amount
+                currencyCode
               }
-              price
             }
           }
         }

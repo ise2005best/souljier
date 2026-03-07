@@ -11,7 +11,8 @@ const ProductDetailPage = ({ product }: Product) => {
 
   const images = product?.media?.edges ?? []
   const variants = product?.variants?.edges ?? []
-  const price = parseFloat(variants[0]?.node?.price ?? "0").toFixed(2)
+  console.log(variants)
+  const price = parseFloat(variants[0]?.node?.price.amount ?? "0").toFixed(2)
 
   const sections = [
     {

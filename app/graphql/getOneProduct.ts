@@ -1,54 +1,36 @@
 export const GET_ONE_PRODUCT = `
-query getProductById($handle: String!, $locationId: ID!) {
-  product: productByIdentifier(identifier: {handle: $handle}) {
+query getProductById($handle: String!) {
+  product(handle: $handle) {
     id
     title
     description
     vendor
-    totalInventory
     tags
-    metafields(first:5){
-      edges{
-      node{
-      key
-      value
-      reference{
-      ... on MediaImage{
-      image{
-      url
-      }
-      }
-      }
-      }}
-    }
     variants(first: 20) {
       edges {
         node {
           id
           title
-          price
-          inventoryItem {
+          availableForSale
+          quantityAvailable
+          price {
+            amount
+            currencyCode
+          }
+        }
+      }
+    }
+    media(first: 7) {
+      edges {
+        node {
+          ... on MediaImage {
             id
-            inventoryLevel(locationId: $locationId){
-              quantities(names: "available"){
-                quantity
-              }
+            image {
+              url
             }
           }
         }
       }
     }
-    media(first:7){
-            edges{
-              node{
-                ... on MediaImage{
-                  id
-                  image{
-                    url
-                  }
-                }
-              }
-            }
-          }
   }
 }`;

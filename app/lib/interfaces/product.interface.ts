@@ -54,15 +54,12 @@ export interface Product {
       node: {
         id: string;
         title: string;
-        price: string;
+        price: {
+          amount: string
+          currenyCode:string
+        }
         inventoryItem: {
           id: string;
-        };
-        contextualPricing?: {
-          price: {
-            amount: number;
-            currencyCode: string;
-          };
         };
       };
     }[];
