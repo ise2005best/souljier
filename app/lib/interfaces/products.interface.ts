@@ -1,17 +1,19 @@
 export interface Product {
   cursor: string;
-  node: {
-    id: string;
-    title: string;
-    description: string;
-    handle: string;
-    vendor: string;
-    totalInventory: number;
-    tags: string[];
-    metafields: ProductMetafields;
-    variants: Variant;
-    media: MediaImage;
-  };
+  node: ProductInfo;
+}
+
+export interface ProductInfo {
+  id: string;
+  title: string;
+  description: string;
+  handle: string;
+  vendor: string;
+  totalInventory: number;
+  tags: string[];
+  metafields: ProductMetafields;
+  variants: Variant;
+  media: MediaImage;
 }
 
 export interface ProductMetafields {

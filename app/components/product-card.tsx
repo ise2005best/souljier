@@ -5,7 +5,7 @@ import Image from "next/image";
 
 interface ProductCardProps {
   cursor: string;
-  product: Product;
+  product: Product
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product }) => {

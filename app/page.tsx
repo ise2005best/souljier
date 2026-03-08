@@ -1,10 +1,11 @@
 import { getAllShopifyProducts } from "./lib/shopify-queries/getAllProducts";
 import { notFound } from "next/navigation";
 import ProductComponent from "./components/product-component";
+import { ProductNode } from "./lib/interfaces/products.interface";
 
 export default async function AllProductsPage() {
-
-  const allProductsData = await getAllShopifyProducts();
+  const allProductsData: ProductNode | undefined =
+    await getAllShopifyProducts();
 
   if (!allProductsData) {
     notFound();

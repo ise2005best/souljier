@@ -1,4 +1,5 @@
 import { GET_PRODUCTS_QUERY } from "@/app/graphql/getAllProducts";
+import { ProductNode } from "../interfaces/products.interface";
 
 export const getAllShopifyProducts = async () => {
       try {
@@ -13,7 +14,7 @@ export const getAllShopifyProducts = async () => {
         if (!response.ok) throw new Error("Failed to fetch products");
     
         const data = await response.json();
-        const products = data.data.products;
+        const products:ProductNode = data.data.products;
         console.log(products)
         return products;
       } catch (error) {

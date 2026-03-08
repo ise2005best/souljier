@@ -13,7 +13,9 @@ const ProductDetailPage = ({ product }: Product) => {
 
   const images = product?.media?.edges ?? [];
   const variants = product?.variants;
-  const price = parseFloat(variants.edges[0]?.node?.price.amount ?? "0").toFixed(2);
+  const price = parseFloat(
+    variants.edges[0]?.node?.price.amount ?? "0",
+  ).toFixed(2);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -44,7 +46,6 @@ const ProductDetailPage = ({ product }: Product) => {
       return value;
     }
   };
-  
 
   const sections = [
     {
@@ -69,8 +70,16 @@ const ProductDetailPage = ({ product }: Product) => {
     {
       id: "shipping",
       label: "SHIPPING",
-      content:
-        "Standard delivery 3–5 business days. Express delivery available at checkout.",
+      content:  [
+        "UK DOMESTIC ORDERS SHIP WITHIN 3-5 WORKING DAYS",
+        "INTERNATIONAL ORDERS 5-15 WORKING DAYS",
+        "UNLESS A PRE-ORDER SHIP DATE IS GIVEN",
+        "IT'S THE CUSTOMER'S RESPONSIBILITY TO PAY IMPORT TAXES",
+        "REGULATIONS FOR IMPORT DUTIES AND TAXES MAY VARY AND WE ARE UNABLE TO CONTROL NOR PREDICT THEIR AMOUNT",
+        "IF YOU REFUSE A SHIPMENT FROM US, YOU ARE RESPONSIBLE FOR THE ORIGINAL SHIPPING CHARGES AND THE COURIER COST",
+        "PLEASE REFER TO OUR TERMS OF SALE FOR FURTHER INFORMATION",
+        "Please note that international shipments may take longer to be delivered due to the customs process in your country"
+      ]
     },
   ];
 
@@ -88,6 +97,7 @@ const ProductDetailPage = ({ product }: Product) => {
 
   return (
     <div className="bg-white">
+      <div></div>
       {/* ── MOBILE only ── */}
       <div className="md:hidden flex flex-col">
         <div
@@ -135,45 +145,50 @@ const ProductDetailPage = ({ product }: Product) => {
       </div>
 
       {/* ── DESKTOP only ── */}
-      <div className="hidden md:flex items-start">
-        <div className="flex-1 min-w-0">
-          {images.length > 0 ? (
-            images.map(({ node }, index) => (
-              <div
-                key={index}
-                className="relative w-full"
-                style={{ aspectRatio: "5/4" }}
-              >
+      <div className="hidden md:flex flex-col">
+        <div className="flex items-start">
+          <div className="flex-1 min-w-0">
+            {images.length > 0 ? (
+              images.map(({ node }, index) => (
+                <div
+                  key={index}
+                  className="relative w-full"
+                  style={{ aspectRatio: "5/4" }}
+                >
+                  <Image
+                    src={node.image?.url ?? "/placeholder.jpg"}
+                    alt={`Product image ${index + 1}`}
+                    fill
+                    sizes="60vw"
+                    className="object-cover"
+                    priority={index === 0}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="relative w-full" style={{ aspectRatio: "5/4" }}>
                 <Image
-                  src={node.image?.url ?? "/placeholder.jpg"}
-                  alt={`Product image ${index + 1}`}
+                  src="/placeholder.jpg"
+                  alt="Product"
                   fill
                   sizes="60vw"
                   className="object-cover"
-                  priority={index === 0}
                 />
               </div>
-            ))
-          ) : (
-            <div className="relative w-full" style={{ aspectRatio: "5/4" }}>
-              <Image
-                src="/placeholder.jpg"
-                alt="Product"
-                fill
-                sizes="60vw"
-                className="object-cover"
-              />
+            )}
+          </div>
+
+          <div className="w-[2px] bg-secondary self-stretch shrink-0" />
+
+          <div className="w-[40%] shrink-0 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto">
+            <div className="p-8 m-4">
+              <ProductInformation {...sharedProps} />
             </div>
-          )}
-        </div>
-
-        <div className="w-[2px] bg-secondary self-stretch shrink-0" />
-
-        <div className="w-[40%] shrink-0 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto">
-          <div className="p-8 m-4 ">
-            <ProductInformation {...sharedProps} />
           </div>
         </div>
+
+        {/* Horizontal bottom line */}
+        <div className="h-[2px] bg-secondary w-full" />
       </div>
     </div>
   );

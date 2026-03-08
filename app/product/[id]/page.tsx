@@ -3,6 +3,8 @@ import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import ProductDetailPage from "./product-client";
 import { Product } from "@/app/lib/interfaces/product.interface";
+import { getAllShopifyProducts } from "@/app/lib/shopify-queries/getAllProducts";
+import YouMayAlsoLike from "./youMayAlsoLike";
 
 export default async function ProductPage({
   params,
@@ -20,15 +22,19 @@ export default async function ProductPage({
     id,
     userLocationId,
   );
+  const allProductsData = await getAllShopifyProducts();
   const product = data?.product;
 
-  if (!product) {
+  const related = allProductsData?.edges.find(({ node }) => node.handle !== id);
+
+  if (!product || !related) {
     notFound();
   }
 
   return (
     <div className="bg-white">
       <ProductDetailPage product={product} />
+      <YouMayAlsoLike products={related}/>
     </div>
   );
 }

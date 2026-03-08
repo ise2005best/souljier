@@ -42,7 +42,7 @@ const ProductInformation = ({
             key={node.id}
             onClick={() => onSelectVariant(node.id)}
             className={[
-              "px-10 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
+              "md:px-10 px-5 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
               selectedVariant === node.id
                 ? "bg-[#1a1108] text-white border-[#1a1108]"
                 : "bg-white border-[#1a1108] text-black",
@@ -73,7 +73,7 @@ const ProductInformation = ({
             />
           </button>
           {openSection === section.id && (
-            <div className="pb-5 text-[13px] text-gray-500 leading-relaxed tracking-wide text-left">
+            <div className="pb-5 md:text-[13px] text-[10px] text-gray-500 leading-relaxed tracking-wide text-left">
               {Array.isArray(section.content) ? (
                 <ul className="list-disc list-inside space-y-1">
                   {section.content.map((item: string, i: number) => (
