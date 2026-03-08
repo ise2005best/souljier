@@ -12,6 +12,7 @@ const Footer = () => {
 
   return (
     <footer className="bg-white text-secondary">
+      <div className="border-t-2 border-secondary/30 " />
       <div className="max-w-7xl mx-auto px-6 py-2">
         {/* Top row */}
         <div className="flex md:flex-row justify-between items-center gap-6 font-primary">
