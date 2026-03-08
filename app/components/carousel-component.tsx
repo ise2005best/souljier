@@ -11,6 +11,13 @@ const Carousel = () =>{
         "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A5293.png?v=1772985336",
         "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A5119.png?v=1772985336"
     ]
+    const desktopImages = [
+        "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A5096_1.png?v=1772991033",
+        "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A4812_1.png?v=1772991033",
+        "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A4891_1.png?v=1772991033",
+        "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A5293_1.png?v=1772991033",
+        "https://cdn.shopify.com/s/files/1/0700/5074/2539/files/GX8A5119_1.png?v=1772991033"
+    ]
     const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
     const [selectedIndex, setSelectedIndex] = useState(0);
     useEffect(() => {
@@ -37,7 +44,7 @@ const Carousel = () =>{
         >
           <div className="embla h-full w-full" ref={emblaRef}>
             <div className="embla__container flex h-full">
-              {images.map((image, index) => (
+              {desktopImages.map((image, index) => (
                 <div
                   className="embla__slide flex-[0_0_100%] relative h-full"
                   key={index}
@@ -52,6 +59,7 @@ const Carousel = () =>{
                 </div>
               ))}
             </div>
+           
           </div>
 
           <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-row gap-2">

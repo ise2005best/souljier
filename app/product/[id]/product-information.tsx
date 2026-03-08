@@ -1,17 +1,19 @@
-"use client"
+"use client";
 import { ProductInfo, Variant } from "@/app/lib/interfaces/product.interface";
 import { Minus, Plus } from "lucide-react";
 import { FaAngleDown } from "react-icons/fa";
 import { useState } from "react";
+import { cartProps } from "@/app/store/cart.interface";
+import { useCartStore } from "@/app/store/cart.store";
+import { useCartUIStore } from "@/app/store/cart-ui.store";
 
 export interface InfoPanelProps {
   product: ProductInfo;
   price: string;
   variants: Variant;
   sections: { id: string; label: string; content: string | string[] }[];
-  selectedVariant: string | null;
+  selectedVariantId: string | null;
   openSection: string | null;
-  onSelectVariant: (id: string) => void;
   onToggleSection: (id: string) => void;
 }
 
@@ -20,15 +22,45 @@ const ProductInformation = ({
   price,
   variants,
   sections,
-  selectedVariant,
+  selectedVariantId,
   openSection,
-  onSelectVariant,
   onToggleSection,
 }: InfoPanelProps) => {
   const [quantity, setQuantity] = useState(1);
+  const { addToCart, updateItemQuantity } = useCartStore();
+  const setIsCartOpen = useCartUIStore((state) => state.openCart);
 
-  const increaseQuantity = () => setQuantity((prev) => prev + 1);
-  const decreaseQuantity = () => setQuantity((prev) => Math.max(prev - 1, 1));
+  const increaseQuantity = () => {
+    setQuantity((prev) => prev + 1);
+    if (selectedVariantId) {
+      updateItemQuantity(selectedVariantId, quantity);
+    }
+  };
+  const decreaseQuantity = () => {
+    setQuantity((prev) => Math.max(prev - 1, 1));
+    if (selectedVariantId) {
+      updateItemQuantity(selectedVariantId, quantity);
+    }
+  };
+
+  const cartItem: cartProps = {
+    id: product?.id || "",
+    productName: product?.title || "",
+    currencyCode: "£",
+    quantity: quantity,
+    price: parseInt(price),
+    variant: "ONE SIZE",
+    variantId: selectedVariantId || "",
+    vendor: product?.vendor || "",
+    productId: product?.id || "",
+    // use the first image as the main image
+    imageUrl: product?.media.edges[0]?.node.image.url || "",
+  };
+
+  const addItemToCart = () => {
+    setIsCartOpen();
+    addToCart(cartItem);
+  };
 
   return (
     <div className="w-full font-primary text-center">
@@ -63,10 +95,9 @@ const ProductInformation = ({
           {variants.edges.map(({ node }) => (
             <button
               key={node.id}
-              onClick={() => onSelectVariant(node.id)}
               className={[
                 "md:px-10 px-5 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
-                selectedVariant === node.id
+                selectedVariantId === node.id
                   ? "bg-[#1a1108] text-white border-[#1a1108]"
                   : "bg-white border-[#1a1108] text-black",
               ].join(" ")}
@@ -77,7 +108,8 @@ const ProductInformation = ({
         </div>
       )}
 
-      <button className="w-full py-3 bg-black rounded-md text-white md:text-sm text-xs font-primary font-semibold uppercase md:mb-8 mb-4 hover:bg-secondary transition-colors duration-200">
+
+      <button className="w-full py-3 bg-black rounded-md text-white md:text-sm text-xs font-primary font-semibold uppercase md:mb-8 mb-4 hover:bg-secondary transition-colors duration-200" onClick={addItemToCart}>
         ADD TO BAG
       </button>
 

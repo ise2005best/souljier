@@ -2,6 +2,7 @@
 import { ProductNode } from "../lib/interfaces/products.interface";
 import ProductCard from "./product-card";
 import Carousel from "./carousel-component";
+import CartModal from "./cart-modal";
 
 const ProductComponent = ({ products }: { products: ProductNode }) => {
   console.log(products);
@@ -22,6 +23,7 @@ const ProductComponent = ({ products }: { products: ProductNode }) => {
           </div>
         ))}
       </div>
+      <CartModal/>
     </div>
   );
 };

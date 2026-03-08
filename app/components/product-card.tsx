@@ -10,11 +10,10 @@ interface ProductCardProps {
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, cardHeight = "h-[60vh]" }) => {
-  const { id, title, media, variants, totalInventory, handle } = product.node;
+  const { id, title, media, totalInventory, handle } = product.node;
 
-  const price = variants.edges[0]?.node?.price;
   const mainImage = media.edges[0]?.node?.image?.url ?? "";
-  const hoverImage = media.edges[1]?.node?.image?.url;
+  const hoverImage = media.edges[2]?.node?.image?.url;
 
   if (!mainImage) return null;
 

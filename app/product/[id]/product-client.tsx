@@ -4,12 +4,15 @@ import Image from "next/image";
 import { Product } from "@/app/lib/interfaces/product.interface";
 import ProductInformation from "./product-information";
 import { InfoPanelProps } from "./product-information";
+import CartModal from "@/app/components/cart-modal";
 
 import useEmblaCarousel from "embla-carousel-react";
 
 const ProductDetailPage = ({ product }: Product) => {
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  // the selected variant id, is the first variant
+  const [selectedVariantId, setselectedVariantId] = useState<string>(product.variants.edges[0].node.id);
   const [openSection, setOpenSection] = useState<string | null>(null);
+  console.log(selectedVariantId)
 
   const images = product?.media?.edges ?? [];
   const variants = product?.variants;
@@ -46,6 +49,7 @@ const ProductDetailPage = ({ product }: Product) => {
       return value;
     }
   };
+
 
   const sections = [
     {
@@ -88,9 +92,8 @@ const ProductDetailPage = ({ product }: Product) => {
     price,
     variants,
     sections,
-    selectedVariant,
+    selectedVariantId,
     openSection,
-    onSelectVariant: setSelectedVariant,
     onToggleSection: (id) =>
       setOpenSection((prev) => (prev === id ? null : id)),
   };
@@ -190,6 +193,7 @@ const ProductDetailPage = ({ product }: Product) => {
         {/* Horizontal bottom line */}
         <div className="h-[2px] bg-secondary w-full" />
       </div>
+      <CartModal/>
     </div>
   );
 };

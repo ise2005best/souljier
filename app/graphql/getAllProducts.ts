@@ -22,7 +22,7 @@ export const GET_PRODUCTS_QUERY = `{
             }
           }
         }
-        media(first: 2) {
+        media(first: 3) {
           edges {
             node {
               ... on MediaImage {
