@@ -6,9 +6,10 @@ import Image from "next/image";
 interface ProductCardProps {
   cursor: string;
   product: Product
+   cardHeight?: string;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, cardHeight = "h-[60vh]" }) => {
   const { id, title, media, variants, totalInventory, handle } = product.node;
 
   const price = variants.edges[0]?.node?.price;
@@ -20,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
   return (
     <div key={id}>
       <div className="w-full h-fit">
-        <div className="relative group overflow-hidden h-[60vh]">
+               <div className={`relative group overflow-hidden ${cardHeight}`}>
           <Link href={`/product/${handle}`}>
 
             {/* Main Image */}

@@ -1,4 +1,3 @@
-import { Search, ShoppingCart } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -18,23 +17,6 @@ const Navbar = () => {
               priority
             />
           </Link>
-
-          {/* Icons */}
-          {/* <div className="flex items-center gap-6">
-            <button
-              aria-label="Search"
-              className="text-secondary transition-colors"
-            >
-              <Search className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-
-            <button
-              aria-label="Shopping Cart"
-              className="text-secondary transition-colors"
-            >
-              <ShoppingCart className="w-5 h-5 md:w-6 md:h-6" />
-            </button>
-          </div> */}
         </div>
       </div>
     </nav>

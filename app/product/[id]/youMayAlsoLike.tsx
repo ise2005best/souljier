@@ -7,11 +7,16 @@ interface Props {
 
 const YouMayAlsoLike = ({ products }: Props) => {
   return (
-    <div className="max-w-md max-md:px-6">
-        <div className="md:py-4 py-2 px-3 md:text-base text-sm border bg-secondary text-white w-fit font-primary">
+    <div className="max-w-md max-md:px-6 ">
+        <div className="flex justify-center items-center">
+        <div className="md:py-4 py-2 px-3 md:text-base text-xs border bg-secondary text-white w-fit font-primary">
             YOU MAY ALSO LIKE
             </div>
-      <ProductCard product={products} cursor={products.node.id}/>
+        </div>
+       
+            <div className="w-full"> {/* control card width */}
+    <ProductCard product={products} cursor={products.node.id} cardHeight="h-[30vh]" />
+  </div>
     </div>
   );
 };
