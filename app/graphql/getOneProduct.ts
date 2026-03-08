@@ -20,6 +20,13 @@ query getProductById($handle: String!) {
         }
       }
     }
+    metafields(identifiers: [
+      { namespace: "custom", key: "product_details" }
+    ]) {
+      key
+      value
+      type
+    }
     media(first: 7) {
       edges {
         node {

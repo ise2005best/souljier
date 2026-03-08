@@ -1,149 +1,182 @@
-"use client"
+"use client";
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import { Product } from "@/app/lib/interfaces/product.interface";
+import ProductInformation from "./product-information";
+import { InfoPanelProps } from "./product-information";
 
-import { useState } from "react"
-import Image from "next/image"
-import { Product } from "@/app/lib/interfaces/product.interface"
-import { FaAngleDown } from "react-icons/fa"
+import useEmblaCarousel from "embla-carousel-react";
 
 const ProductDetailPage = ({ product }: Product) => {
-  const [selectedVariant, setSelectedVariant] = useState<string | null>(null)
-  const [openSection, setOpenSection] = useState<string | null>(null)
+  const [selectedVariant, setSelectedVariant] = useState<string | null>(null);
+  const [openSection, setOpenSection] = useState<string | null>(null);
 
-  const images = product?.media?.edges ?? []
-  const variants = product?.variants?.edges ?? []
-  console.log(variants)
-  const price = parseFloat(variants[0]?.node?.price.amount ?? "0").toFixed(2)
+  const images = product?.media?.edges ?? [];
+  const variants = product?.variants;
+  const price = parseFloat(variants.edges[0]?.node?.price.amount ?? "0").toFixed(2);
+
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    let autoplayInterval: NodeJS.Timeout;
+
+    const startAutoplay = setTimeout(() => {
+      autoplayInterval = setInterval(() => emblaApi.scrollNext(), 5000);
+    }, 3000);
+
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    emblaApi.on("select", onSelect);
+    onSelect();
+
+    return () => {
+      clearTimeout(startAutoplay);
+      if (autoplayInterval) clearInterval(autoplayInterval);
+    };
+  }, [emblaApi]);
+  const parseMetafield = (value: string | null): string | string[] => {
+    if (!value) return "";
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed) ? parsed : value;
+    } catch {
+      return value;
+    }
+  };
+  
 
   const sections = [
     {
       id: "details",
       label: "PRODUCT DETAILS",
-      content: product?.description ?? "No details available.",
+      content: parseMetafield(product?.metafields[0].value),
     },
     {
       id: "care",
       label: "PRODUCT CARE",
-      content: "Dry clean or hand wash in cold water. Do not tumble dry. Iron on low heat.",
+      content: [
+        "⁠Do not machine wash",
+        "⁠Spot clean gently with a soft damp cloth",
+        "⁠⁠Do not wash",
+        "⁠⁠Do not bleach",
+        "⁠⁠Do not tumble dry",
+        "⁠⁠⁠Do not dry clean",
+        "⁠Do not iron directly on embroidery or crystals",
+        "⁠Store in a cool, dry place to maintain shape and embellishment quality",
+      ],
     },
     {
       id: "shipping",
       label: "SHIPPING",
-      content: "Standard delivery 3–5 business days. Express delivery available at checkout.",
+      content:
+        "Standard delivery 3–5 business days. Express delivery available at checkout.",
     },
-  ]
+  ];
 
-  const toggleSection = (id: string) => {
-    setOpenSection((prev) => (prev === id ? null : id))
-  }
+  const sharedProps: InfoPanelProps = {
+    product,
+    price,
+    variants,
+    sections,
+    selectedVariant,
+    openSection,
+    onSelectVariant: setSelectedVariant,
+    onToggleSection: (id) =>
+      setOpenSection((prev) => (prev === id ? null : id)),
+  };
 
   return (
-    <div className="flex flex-col md:flex-row bg-white items-start">
-
-      {/* LEFT — Scrolling Image Stack */}
-      <div className="flex-1 min-w-0">
-        {images.length > 0 ? (
-          images.map(({ node }, index) => (
-            <div key={node.image?.url ?? index} className="relative w-full aspect-5/4">
-              <Image
-                src={node.image?.url ?? "/placeholder.jpg"}
-                alt={`Product image ${index + 1}`}
-                fill
-                sizes="(max-width: 768px) 100vw, 60vw"
-                className="object-cover"
-                priority={index === 0}
-              />
-            </div>
-          ))
-        ) : (
-          <div className="relative w-full aspect-5/4">
-            <Image
-              src="/placeholder.jpg"
-              alt="Product"
-              fill
-              sizes="(max-width: 768px) 100vw, 60vw"
-              className="object-cover"
-            />
-          </div>
-        )}
-      </div>
-
-      {/* DIVIDER */}
-      <div className="hidden md:block w-[2px] bg-secondary self-stretch shrink-0" />
-
-      {/* RIGHT — Sticky Info Panel */}
-      <div className="w-full md:w-[40%] shrink-0 md:sticky md:top-0 md:h-screen">
-        <div className="h-full flex items-start justify-center overflow-y-auto px-6 md:px-10 py-12 md:py-16 bg-white">
-          <div className="w-full max-w-md font-primary text-center">
-
-            {/* Title */}
-            <h1 className="text-xl md:text-2xl font-black text-black tracking-wide leading-snug mb-4">
-              {product?.title}
-            </h1>
-
-            {/* Price */}
-            <p className="text-lg md:text-xl font-black text-black mb-3 tracking-wide">
-              £{price}
-            </p>
-
-            <p className="text-base md:text-lg font-semibold text-black mb-10 tracking-wide">
-              {product?.description}
-            </p>
-
-            {/* Variants */}
-            {variants.length > 0 && (
-              <div className="flex flex-wrap justify-center gap-2 mb-7">
-                {variants.map(({ node }) => (
-                  <button
-                    key={node.id}
-                    onClick={() => setSelectedVariant(node.id)}
-                    className={[
-                      "px-16 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
-                      selectedVariant === node.id
-                        ? "bg-[#1a1108] text-white border-[#1a1108]"
-                        : "bg-black text-white hover:bg-white hover:border-[#1a1108] hover:text-black",
-                    ].join(" ")}
-                  >
-                    {node.title}
-                  </button>
-                ))}
-              </div>
-            )}
-
-            {/* Add to Bag */}
-            <button className="w-full py-3 bg-black rounded-md text-white text-sm font-primary font-semibold uppercase mb-9 hover:bg-secondary transition-colors duration-200">
-              ADD TO BAG
-            </button>
-
-            {/* Accordion */}
-            <div className="border-t-2 mt-20 border-secondary font-primary">
-              {sections.map((section) => (
-                <div key={section.id} className="border-b-2 border-secondary">
-                  <button
-                    onClick={() => toggleSection(section.id)}
-                    className="w-full flex justify-between items-center py-3 text-md text-[#1a1108] font-medium uppercase"
-                  >
-                    <span>{section.label}</span>
-                    <FaAngleDown
-                      className={`w-4 h-4 text-secondary transition-transform duration-200 ${
-                        openSection === section.id ? "rotate-180" : ""
-                      }`}
-                    />
-                  </button>
-                  {openSection === section.id && (
-                    <p className="pb-5 text-[13px] text-gray-500 leading-relaxed tracking-wide">
-                      {section.content}
-                    </p>
-                  )}
+    <div className="bg-white">
+      {/* ── MOBILE only ── */}
+      <div className="md:hidden flex flex-col">
+        <div
+          className="relative overflow-hidden w-full"
+          style={{ aspectRatio: "4/5" }}
+        >
+          <div className="embla h-full w-full" ref={emblaRef}>
+            <div className="embla__container flex h-full">
+              {images.map((image, index) => (
+                <div
+                  className="embla__slide flex-[0_0_100%] relative h-full"
+                  key={image.node.id ?? index}
+                >
+                  <Image
+                    src={image.node.image?.url ?? "/placeholder.jpg"}
+                    alt={`Product image ${index + 1}`}
+                    fill
+                    priority={index === 0}
+                    className="object-cover"
+                  />
                 </div>
               ))}
             </div>
-
           </div>
+
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex flex-row gap-2">
+            {images.map((_, index) => (
+              <button
+                key={index}
+                onClick={() => emblaApi?.scrollTo(index)}
+                aria-label={`Go to slide ${index + 1}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  selectedIndex === index
+                    ? "bg-secondary w-8"
+                    : "bg-white/75 w-2"
+                }`}
+              />
+            ))}
+          </div>
+        </div>
+
+        <div className="px-5 py-8">
+          <ProductInformation {...sharedProps} />
         </div>
       </div>
 
-    </div>
-  )
-}
+      {/* ── DESKTOP only ── */}
+      <div className="hidden md:flex items-start">
+        <div className="flex-1 min-w-0">
+          {images.length > 0 ? (
+            images.map(({ node }, index) => (
+              <div
+                key={index}
+                className="relative w-full"
+                style={{ aspectRatio: "5/4" }}
+              >
+                <Image
+                  src={node.image?.url ?? "/placeholder.jpg"}
+                  alt={`Product image ${index + 1}`}
+                  fill
+                  sizes="60vw"
+                  className="object-cover"
+                  priority={index === 0}
+                />
+              </div>
+            ))
+          ) : (
+            <div className="relative w-full" style={{ aspectRatio: "5/4" }}>
+              <Image
+                src="/placeholder.jpg"
+                alt="Product"
+                fill
+                sizes="60vw"
+                className="object-cover"
+              />
+            </div>
+          )}
+        </div>
 
-export default ProductDetailPage
+        <div className="w-[2px] bg-secondary self-stretch shrink-0" />
+
+        <div className="w-[40%] shrink-0 sticky top-6 self-start max-h-[calc(100vh-3rem)] overflow-y-auto">
+          <div className="p-8 m-4 ">
+            <ProductInformation {...sharedProps} />
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductDetailPage;

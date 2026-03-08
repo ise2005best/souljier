@@ -1,17 +1,19 @@
 export interface Product {
-    product: {
-      id: string;
-      title: string;
-      description: string;
-      vendor: string;
-      totalInventory: number;
-      tags: string[];
-      collections: ProductCollections
-      translations: ProductTranslation[];
-      metafields: ProductMetafields;
-      variants: Variant;
-      media: MediaImage;
-    };
+    product: ProductInfo;
+  }
+
+  export interface ProductInfo {
+    id: string;
+    title: string;
+    description: string;
+    vendor: string;
+    totalInventory: number;
+    tags: string[];
+    collections: ProductCollections
+    translations: ProductTranslation[];
+    metafields: ProductMetafields[];
+    variants: Variant;
+    media: MediaImage;
   }
   
   export interface ProductCollections {
@@ -30,17 +32,9 @@ export interface Product {
   }
   
   export interface ProductMetafields {
-    edges: {
-      node: {
-        key: string;
-        value: string;
-        reference?: {
-          image: {
-            url: string;
-          };
-        };
-      };
-    }[];
+    key: string;
+    type: "string";
+    value: string
   }
   
   export interface InventoryLevel {
