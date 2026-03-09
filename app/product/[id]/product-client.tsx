@@ -12,7 +12,6 @@ const ProductDetailPage = ({ product }: Product) => {
   // the selected variant id, is the first variant
   const [selectedVariantId, setselectedVariantId] = useState<string>(product.variants.edges[0].node.id);
   const [openSection, setOpenSection] = useState<string | null>(null);
-  console.log(selectedVariantId)
 
   const images = product?.media?.edges ?? [];
   const variants = product?.variants;

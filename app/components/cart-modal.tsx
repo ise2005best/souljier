@@ -13,7 +13,7 @@ interface Item {
 const CartModal = () => {
   const cart = useCartStore((state) => state.cartItems);
   const clearCart = useCartStore((state) => state.clearCart);
-  const updateQuantity = useCartStore((state) => state.updateItemQuantity);
+  const {updateItemQuantity} = useCartStore();
   const { isCartOpen, closeCart } = useCartUIStore();
   const totalPrice = cart.reduce(
     (sum, item) => sum + item.price * (item.quantity || 1),
@@ -64,22 +64,23 @@ const CartModal = () => {
             isCartOpen ? "translate-x-0" : "translate-x-full"
           }`}
         >
-          <div className="flex flex-row items-center space-x-3 mt-10 mb-10">
-            <h2 className="font-primary text-black md:text-base text-sm ">
-              YOUR SELECTION: ({cart.length})
-            </h2>
-          </div>
+          
           <X
             onClick={closeCart}
             className="w-5 h-5 absolute top-2 right-2 text-[#292D32] cursor-pointer"
           />
 
           {cart.length === 0 ? (
-            <div className="flex flex-col items-center justify-center h-1/2">
-              <p className="text-gray-500">Your cart is empty</p>
+            <div className="flex flex-col justify-center items-center  h-1/2">
+              <p className="text-primary font-primary">Your cart is empty</p>
             </div>
           ) : (
             <>
+            <div className="flex flex-row items-center space-x-3 mt-10 mb-10">
+            <h2 className="font-primary text-black md:text-base text-sm ">
+              YOUR SELECTION: ({cart.length})
+            </h2>
+          </div>
               <div className="max-h-[60vh] overflow-y-auto">
                 {cart.map((item) => (
                   <div
@@ -109,44 +110,43 @@ const CartModal = () => {
                         </div>
                       </div>
 
-                      <span className="text-black font-bold md:text-md text-sm font-primary">
+                      <span className="text-black font-black md:text-base text-sm font-primary">
                         {item.currencyCode} {item.price}
                       </span>
                       <div className="flex items-center justify-between w-full md:w-[65%]">
-                        <span className="font-primary text-[11px] md:text-[13px] text-black">
+                        <span className="font-primary text-[11px] md:text-xs text-black">
                           {item.variant}
                         </span>
                         <div className="inline-flex items-center space-x-0.5">
                           <button
                             onClick={() =>
-                              updateQuantity(
-                                item.variantId,
+                              updateItemQuantity(
+                                item.productId,
                                 (item.quantity || 1) - 1,
                               )
                             }
-                            className="hover:bg-black/10 p-0.5 rounded"
+                            className="hover:bg-black/10 rounded"
                             disabled={(item.quantity || 1) <= 1}
                           >
-                            <Minus className="w-2.5 h-2.5 text-black/60" />
+                            <Minus className="w-3 h-3 text-black/60" />
                           </button>
 
-                          <span className="font-primary text-[11px] md:text-[13px] text-black px-2">
+                          <span className="font-primary text-[11px] md:text-xs text-black px-1">
                             {item.quantity || 1}X
                           </span>
 
                           <button
-                            onClick={() =>
-                              updateQuantity(
-                                item.variantId,
+                            onClick={() => updateItemQuantity(
+                                item.productId,
                                 (item.quantity || 1) + 1,
                               )
                             }
-                            className="hover:bg-black/10 p-0.5 rounded"
+                            className="hover:bg-black/10 rounded"
                           >
-                            <Plus className="w-2.5 h-2.5 text-black/60" />
+                            <Plus className="w-3 h-3 text-black/60" />
                           </button>
                         </div>
-                        <span className="font-primary text-[11px] md:text-[13px] text-black">
+                        <span className="font-primary text-[11px] md:text-xs text-black">
                           {item.currencyCode}
                           {item.price}
                         </span>
