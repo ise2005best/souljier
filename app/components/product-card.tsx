@@ -1,11 +1,11 @@
 "use client";
-import { Product } from "../lib/interfaces/products.interface";
+import { Products } from "../lib/interfaces/products.interface";
 import Link from "next/link";
 import Image from "next/image";
 
 interface ProductCardProps {
   cursor: string;
-  product: Product
+  product: Products
    cardHeight?: string;
 }
 
