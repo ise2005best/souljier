@@ -1,4 +1,4 @@
-export interface Product {
+export interface Products {
   cursor: string;
   node: ProductInfo;
 }
@@ -68,6 +68,6 @@ export interface MediaImage {
 }
 
 export interface ProductNode {
-  edges: Product[];
+  edges: Products[];
   extensions: [];
 }

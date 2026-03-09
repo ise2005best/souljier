@@ -1,8 +1,8 @@
 import ProductCard from "@/app/components/product-card";
-import { Product } from "@/app/lib/interfaces/products.interface";
+import { Products } from "@/app/lib/interfaces/products.interface";
 
 interface Props {
-  products: Product
+  products: Products
 }
 
 const YouMayAlsoLike = ({ products }: Props) => {
