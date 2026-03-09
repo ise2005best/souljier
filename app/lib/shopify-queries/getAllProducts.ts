@@ -15,7 +15,6 @@ export const getAllShopifyProducts = async () => {
     
         const data = await response.json();
         const products:ProductNode = data.data.products;
-        console.log(products)
         return products;
       } catch (error) {
         console.error("Error fetching products:", error);

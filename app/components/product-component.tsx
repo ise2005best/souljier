@@ -5,7 +5,6 @@ import Carousel from "./carousel-component";
 import CartModal from "./cart-modal";
 
 const ProductComponent = ({ products }: { products: ProductNode }) => {
-  console.log(products);
   return (
     <div>
       <div className="w-full">

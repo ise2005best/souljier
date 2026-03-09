@@ -19,7 +19,6 @@ export const getAProduct = async (
     if (!response.ok) throw new Error("Failed to fetch products");
 
     const data: ProductNode = await response.json();
-    console.log(data)
     const products: Product | null = { product: data.data.product };
     return products;
   } catch (error) {

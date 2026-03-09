@@ -31,17 +31,14 @@ export const useCartStore = create(
             },
 
             updateItemQuantity(id, quantity) {
-                console.log(id, quantity)
                 // if quantity is less than 1, remove the item from the cart
                 if(quantity < 1){
                     get().removeItem(id);
                 }
 
                 const cartItems = get().getCart();
-                console.log(cartItems)
                 // Find the item in the cart
                 const item = cartItems.find(item => item.productId === id);
-                console.log(item)
                 if(item){
                     // Update the quantity of the item
                     // need to create the cart component and let it reflect the changes

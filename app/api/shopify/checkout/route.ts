@@ -43,7 +43,6 @@ export async function POST(req: NextRequest) {
       `/cart/add?${queryString}&return_to=/checkout`
     );
     const fullUrl = `https://${shopifyStore}.myshopify.com/cart/clear?return_to=${returnTo}`;
-    console.log(fullUrl)
 
     return NextResponse.json({ checkoutUrl: fullUrl }, { status: 200 });
   } catch (error) {

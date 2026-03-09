@@ -5,7 +5,7 @@ import Link from "next/link";
 const Footer = () => {
   const legals = [
     { label: "Shipping Policy", href: "/shipping-policy" },
-    { label: "Terms of Service", href: "/terms-of-servicy" },
+    { label: "Terms of Service", href: "/terms-of-service" },
   ];
 
   return (
@@ -47,7 +47,7 @@ const Footer = () => {
               <Link
                 key={label}
                 href={href}
-                className="md:text-xs text-[9px] text-secondary/70 hover:text-secondary transition-colors duration-150"
+                className="md:text-xs text-[9px] text-secondary/70 hover:text-secondary transition-colors duration-150 hover:underline"
               >
                 {label}
               </Link>
