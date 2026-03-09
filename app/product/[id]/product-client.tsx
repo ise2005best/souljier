@@ -13,6 +13,7 @@ const ProductDetailPage = ({ product }: Product) => {
   const [selectedVariantId, setselectedVariantId] = useState<string>(product.variants.edges[0].node.id);
   const [openSection, setOpenSection] = useState<string | null>(null);
 
+  
   const images = product?.media?.edges ?? [];
   const variants = product?.variants;
   const price = parseFloat(
