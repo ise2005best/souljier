@@ -5,7 +5,7 @@ import ProductDetailPage from "./product-client";
 import { Product } from "@/app/lib/interfaces/product.interface";
 import { getAllShopifyProducts } from "@/app/lib/shopify-queries/getAllProducts";
 import YouMayAlsoLike from "./youMayAlsoLike";
-
+export const dynamic = "force-dynamic";
 export default async function ProductPage({
   params,
 }: {
