@@ -1,69 +1,63 @@
-"use client";
-
-import { useEffect, useState } from "react";
-import { useParams, notFound } from "next/navigation";
+import { notFound } from "next/navigation";
 import ProductDetailPage from "./product-client";
 import YouMayAlsoLike from "./youMayAlsoLike";
-import { Product } from "@/app/lib/interfaces/product.interface";
-import { Products } from "@/app/lib/interfaces/products.interface";
+import shopifyClient from "@/app/lib/shopify-queries/shopify";
 import { GET_ONE_PRODUCT } from "@/app/graphql/getOneProduct";
 import { GET_PRODUCTS_QUERY } from "@/app/graphql/getAllProducts";
-import ProductSkeleton from "./product-skeleton";
 
-export default function ProductPage() {
-  const { id } = useParams<{ id: string }>();
-  const [product, setProduct] = useState<Product | null>(null);
-  const [related, setRelated] = useState<Products | null>(null);
-  const [loading, setLoading] = useState(true);
+export default async function ProductPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
 
-  useEffect(() => {
-    if (!id) return;
+  const [{ data: productData }, { data: allProductsData }] = await Promise.all([
+    shopifyClient.request(GET_ONE_PRODUCT, { variables: { handle: id } }),
+    shopifyClient.request(GET_PRODUCTS_QUERY),
+  ]);
+  console.log(productData)
 
-    const fetchData = async () => {
-      try {
-        const [productRes, allProductsRes] = await Promise.all([
-          fetch("/api/shopify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              query: GET_ONE_PRODUCT,
-              variables: { handle: id },
-            }),
-          }),
-          fetch("/api/shopify", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ query: GET_PRODUCTS_QUERY }),
-          }),
-        ]);
+  const product = productData?.product;
+  const related = allProductsData?.products?.edges?.find(
+    ({ node }: { node: { handle: string } }) => node.handle !== id
+  );
 
-        const productData = await productRes.json();
-        const allProductsData = await allProductsRes.json();
-
-        const fetchedProduct = productData?.data?.product;
-        const relatedProduct = allProductsData?.data?.products?.edges?.find(
-          ({ node }: { node: { handle: string } }) => node.handle !== id
-        );
-
-        if (!fetchedProduct) return notFound();
-        setProduct({ product: fetchedProduct });
-        setRelated(relatedProduct ?? null);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [id]);
-
-  if (loading) return <ProductSkeleton/>;
+  if (!product) notFound();
 
   return (
     <div className="bg-white">
-      {product && <ProductDetailPage product={product.product} />}
+      <ProductDetailPage product={product} />
       {related && <YouMayAlsoLike products={related} />}
     </div>
   );
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+
+  const { data } = await shopifyClient.request(GET_ONE_PRODUCT, {
+    variables: { handle: id },
+  });
+
+  const product = data?.product;
+
+  if (!product) return { title: "Product Not Found" };
+
+  return {
+    title: `${product.title} Souljier Store`,
+    description: product.description,
+    openGraph: {
+      title: product.title,
+      description: product.description,
+      images: [product.media?.edges[0]?.node?.image?.url],
+    },
+    alternatives: {
+      canonical: `https://souljier.com/product/${id}`,
+    },
+  };
 }
