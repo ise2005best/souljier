@@ -11,12 +11,15 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.95.3",
     "@vercel/analytics": "^1.6.1",
+    "embla-carousel-react": "^8.6.0",
+    "graphql-request": "^7.4.0",
     "lucide-react": "^0.564.0",
     "next": "16.1.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-icons": "^5.5.0",
-    "supabase": "^2.76.8"
+    "supabase": "^2.76.8",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -27,5 +30,9 @@
     "eslint-config-next": "16.1.6",
     "tailwindcss": "^4",
     "typescript": "^5"
-  }
+  },
+  "main": "index.js",
+  "repository": "https://github.com/ise2005best/souljier.git",
+  "author": "ise2005best <iseoluwaariyibi@gmail.com>",
+  "license": "MIT"
 }
