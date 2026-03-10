@@ -25,7 +25,7 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const shopifyStore = process.env.SHOPIFY_STORE_DOMAIN;
+    const shopifyStore = process.env.SHOPIFY_STORE;
     // Build item string for URL
     const queryItems = (items: { VariantId: string; quantity: number }[]) => {
         return items
