@@ -91,25 +91,31 @@ const ProductInformation = ({
       </div>
 
       {variants.edges.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-2 mb-6 mt-6">
+        <div className="flex flex-wrap justify-center gap-2 mb-6 mt-3">
           {variants.edges.map(({ node }) => (
-            <button
-              key={node.id}
-              className={[
-                "md:px-10 px-5 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
-                selectedVariantId === node.id
-                  ? "bg-[#1a1108] text-white border-[#1a1108]"
-                  : "bg-white border-[#1a1108] text-black",
-              ].join(" ")}
-            >
-              {node.title}
-            </button>
+            <div key={node.id}>
+              <p className="text-red-500 mb-3">
+                {node.quantityAvailable} LEFT
+              </p>
+              <button
+                className={[
+                  "md:px-10 px-5 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
+                  selectedVariantId === node.id
+                    ? "bg-[#1a1108] text-white border-[#1a1108]"
+                    : "bg-white border-[#1a1108] text-black",
+                ].join(" ")}
+              >
+                {node.title}
+              </button>
+            </div>
           ))}
         </div>
       )}
 
-
-      <button className="w-full py-3 bg-black rounded-md text-white md:text-sm text-xs font-primary font-semibold uppercase md:mb-8 mb-4 hover:bg-secondary transition-colors duration-200" onClick={addItemToCart}>
+      <button
+        className="w-full py-3 bg-black rounded-md text-white md:text-sm text-xs font-primary font-semibold uppercase md:mb-8 mb-4 hover:bg-secondary transition-colors duration-200"
+        onClick={addItemToCart}
+      >
         ADD TO BAG
       </button>
 

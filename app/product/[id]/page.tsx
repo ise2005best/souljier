@@ -16,7 +16,6 @@ export default async function ProductPage({
     shopifyClient.request(GET_ONE_PRODUCT, { variables: { handle: id } }),
     shopifyClient.request(GET_PRODUCTS_QUERY),
   ]);
-  console.log(productData)
 
   const product = productData?.product;
   const related = allProductsData?.products?.edges?.find(

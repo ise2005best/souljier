@@ -55,6 +55,7 @@ export interface Product {
         inventoryItem: {
           id: string;
         };
+        quantityAvailable: string;
       };
     }[];
   }
