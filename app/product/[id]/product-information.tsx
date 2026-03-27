@@ -95,7 +95,12 @@ const ProductInformation = ({
           {variants.edges.map(({ node }) => (
             <div key={node.id}>
               <p className="text-red-500 mb-3">
-                {node.quantityAvailable} LEFT
+                {node.quantityAvailable < 5 && (
+                  <p className="text-sm">
+                    LOW STOCK
+                    </p>
+                )
+                } 
               </p>
               <button
                 className={[
