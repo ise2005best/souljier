@@ -6,6 +6,7 @@ query getProductById($handle: String!) {
     description
     vendor
     tags
+    totalInventory
     variants(first: 20) {
       edges {
         node {

@@ -69,8 +69,8 @@ const ProductInformation = ({
       </h1>
 
       <p className="text-base md:text-xl font-black text-black mb-3 tracking-wide">
-        £{price}
-      </p>
+          £{price}
+        </p>
 
       <p className="text-xs md:text-base font-semibold text-black md:mb-8 mb-3 tracking-wide">
         {product?.description}
@@ -94,34 +94,34 @@ const ProductInformation = ({
         <div className="flex flex-wrap justify-center gap-2 mb-6 mt-3">
           {variants.edges.map(({ node }) => (
             <div key={node.id}>
-              <p className="text-red-500 mb-3">
-                {node.quantityAvailable < 5 && (
-                  <p className="text-sm">
-                    LOW STOCK
-                    </p>
-                )
-                } 
+              {/* Shows low stock when stock price is between 5 and 1 */}
+            {(node.quantityAvailable < 5 && node.quantityAvailable !== 0) && (
+              <p className="text-red-500 text-sm mb-3">
+                {"LOW STOCK"}
               </p>
-              <button
-                className={[
-                  "md:px-10 px-5 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
-                  selectedVariantId === node.id
-                    ? "bg-[#1a1108] text-white border-[#1a1108]"
-                    : "bg-white border-[#1a1108] text-black",
-                ].join(" ")}
-              >
-                {node.title}
-              </button>
-            </div>
+            )}
+          
+            <button
+              className={[
+                "md:px-10 px-5 py-3 border font-primary text-xs rounded-md uppercase transition-all duration-150",
+                selectedVariantId === node.id
+                  ? "bg-[#1a1108] text-white border-[#1a1108]"
+                  : "bg-white border-[#1a1108] text-black",
+              ].join(" ")}
+            >
+              {node.title}
+            </button>
+          </div>
           ))}
         </div>
       )}
 
       <button
         className="w-full py-3 bg-black rounded-md text-white md:text-sm text-xs font-primary font-semibold uppercase md:mb-8 mb-4 hover:bg-secondary transition-colors duration-200"
+        disabled ={product.totalInventory === 0}
         onClick={addItemToCart}
       >
-        ADD TO BAG
+        {product.totalInventory === 0 ? "OUT OF STOCK" : "ADD TO BAG"}
       </button>
 
       <div className="border-t-2 border-secondary">
